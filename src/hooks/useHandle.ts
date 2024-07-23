@@ -1,8 +1,8 @@
 import { useState } from "react"
 
 export function useHandle () {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [titulo, setTitle] = useState('')
+  const [contenido, setContent] = useState('')
 
   const handleTitle = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(evt.target.value)
@@ -12,15 +12,20 @@ export function useHandle () {
     setContent(evt.target.value)
   }
 
-  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
-    console.log({
-      title: title,
-      content: content
+
+    const res = await fetch('/api/notes', {
+      method: 'POST',
+      body: JSON.stringify({titulo, contenido}),
+      headers: { 'Content-Type': 'application/json' }
     })
+
+    const data = await res.json()
+    
     setTitle('')
     setContent('')
   }
 
-  return {handleTitle, handleContent, handleSubmit, title, content}
+  return {handleTitle, handleContent, handleSubmit, titulo, contenido}
 }
